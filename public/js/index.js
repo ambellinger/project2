@@ -6,42 +6,42 @@ var $exampleList = $("#example-list");
 
 // The API object contains methods for each kind of request we'll make
 var API = {
-  saveExample: function(example) {
+  saveName: function(example) {
     return $.ajax({
       headers: {
         "Content-Type": "application/json"
       },
       type: "POST",
-      url: "api/examples",
+      url: "api/names",
       data: JSON.stringify(example)
     });
   },
-  getExamples: function() {
+  getNames: function() {
     return $.ajax({
-      url: "api/examples",
+      url: "api/names",
       type: "GET"
     });
   },
-  deleteExample: function(id) {
+  deleteName: function(id) {
     return $.ajax({
-      url: "api/examples/" + id,
+      url: "api/names/" + id,
       type: "DELETE"
     });
   }
 };
 
 // refreshExamples gets new examples from the db and repopulates the list
-var refreshExamples = function() {
-  API.getExamples().then(function(data) {
-    var $examples = data.map(function(example) {
+var refreshNames = function() {
+  API.getNames().then(function(data) {
+    var $names = data.map(function(name) {
       var $a = $("<a>")
-        .text(example.text)
-        .attr("href", "/example/" + example.id);
+        .name(name.text)
+        .attr("href", "/name/" + name.id);
 
       var $li = $("<li>")
         .attr({
           class: "list-group-item",
-          "data-id": example.id
+          "data-id": name.id
         })
         .append($a);
 
@@ -54,28 +54,28 @@ var refreshExamples = function() {
       return $li;
     });
 
-    $exampleList.empty();
-    $exampleList.append($examples);
+    $nameList.empty();
+    $nameList.append($names);
   });
 };
 
 // handleFormSubmit is called whenever we submit a new example
 // Save the new example to the db and refresh the list
+// eslint-disable-next-line no-unused-vars
 var handleFormSubmit = function(event) {
   event.preventDefault();
 
-  var example = {
-    text: $exampleText.val().trim(),
-    description: $exampleDescription.val().trim()
+  var name = {
+    name: $exampleText.val().trim()
   };
 
-  if (!(example.text && example.description)) {
+  if (!name.text) {
     alert("You must enter an example text and description!");
     return;
   }
 
-  API.saveExample(example).then(function() {
-    refreshExamples();
+  API.saveName(Name).then(function() {
+    refreshNames();
   });
 
   $exampleText.val("");
@@ -89,11 +89,78 @@ var handleDeleteBtnClick = function() {
     .parent()
     .attr("data-id");
 
-  API.deleteExample(idToDelete).then(function() {
-    refreshExamples();
+  API.deleteName(idToDelete).then(function() {
+    refreshNames();
   });
 };
 
+var getName = function() {
+  event.preventDefault();
+  var apiKey = "ji598704009";
+  var name = $exampleText.val().trim();
+  var url =
+    "https://www.behindthename.com/api/lookup.json?name=" +
+    name +
+    "&key=" +
+    apiKey;
+  $.ajax({
+    url: url,
+    type: "GET",
+    success: function(response) {
+      console.log(response);
+    }
+  });
+};
+
+var randomMName = function() {
+  var apiKey = "ji598704009";
+  var url =
+    "https://www.behindthename.com/api/random.json?usage=ita&gender=m&key=" +
+    apiKey;
+  $.ajax({
+    url: url,
+    type: "GET",
+    success: function(response) {
+      console.log(response.names[0]);
+    }
+  });
+};
+
+var randomFName = function() {
+  var apiKey = "ji598704009";
+  var url =
+    "https://www.behindthename.com/api/random.json?usage=ita&gender=f&key=" +
+    apiKey;
+  $.ajax({
+    url: url,
+    type: "GET",
+    success: function(response) {
+      console.log(response.names[0]);
+    }
+  });
+};
+
+// var getRelated = function() {
+//   event.preventDefault();
+//   var apiKey = "ji598704009";
+//   var name = $exampleText.val().trim();
+//   var url =
+//     "https://www.behindthename.com/api/related.json?name=" +
+//     name +
+//     "&usage=eng&key=" +
+//     apiKey;
+//   $.ajax({
+//     url: url,
+//     type: "GET",
+//     success: function(response) {
+//       console.log(response);
+//     }
+//   });
+// };
+
 // Add event listeners to the submit and delete buttons
-$submitBtn.on("click", handleFormSubmit);
+window.onload = randomMName();
+window.onload = randomFName();
+$submitBtn.on("click", getName);
+// $submitBtn.on("click", getRelated);
 $exampleList.on("click", ".delete", handleDeleteBtnClick);
