@@ -5,7 +5,10 @@ var request = require("request");
 module.exports = function(app) {
   // Load index page
   app.get("/", function(req, res) {
+    console.log("THIS IS OUR CHECK 1");
     db.Names.findAll({}).then(function(name) {
+      console.log("THIS IS OUR CHECK 2");
+      console.log(name);
       res.render("index", {
         msg: "BURGER",
         name: name

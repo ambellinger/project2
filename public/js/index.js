@@ -113,7 +113,7 @@ var getName = function() {
         url: "/api/Names",
         type: "POST",
         data: { name: response[0].name, gender: response[0].gender },
-        success: function(response) {
+        success: function() {
           // console.log(response);
         }
       });
