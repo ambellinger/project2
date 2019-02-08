@@ -74,7 +74,7 @@ var handleFormSubmit = function(event) {
     return;
   }
 
-  API.saveName(Name).then(function() {
+  API.saveName(name).then(function() {
     refreshNames();
   });
 
@@ -108,9 +108,37 @@ var getName = function() {
     type: "GET",
     success: function(response) {
       console.log(response);
+
+      $.ajax({
+        url: "/api/Names",
+        type: "POST",
+        data: { name: response[0].name, gender: response[0].gender },
+        success: function(response) {
+          // console.log(response);
+        }
+      });
     }
   });
 };
+
+// var postName = function() {
+//   event.preventDefault();
+//   var apiKey = "ji598704009";
+//   var name = $exampleText.val().trim();
+//   var url =
+//     "https://www.behindthename.com/api/lookup.json?name=" +
+//     name +
+//     "&key=" +
+//     apiKey;
+//   $.ajax({
+//     url: "/api/Names",
+//     type: "POST",
+//     data: {name: "Test", gender:"f"}
+//     success: function(response) {
+//       // console.log(response);
+//     }
+//   });
+// };
 
 var randomMName = function() {
   var apiKey = "ji598704009";
