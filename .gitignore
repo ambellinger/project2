@@ -1,3 +1,6 @@
+# delete before deployment to Heroku!!
+#hides keys, passwords, other important info.
+
 .DS_Store
 node_modules
 npm-debug.log
