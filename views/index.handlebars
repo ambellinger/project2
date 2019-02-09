@@ -18,6 +18,7 @@
           </div>
 
           <button id="submit" class="waves-effect waves-light btn">Search<i class="material-icons right">send</i></button>
+          </form>
   </div>
         {{!-- Div for popular names --}}
         <div class="container" id="popular">
@@ -25,8 +26,8 @@
         <ul id="example-list" class="list-group">
           {{#each names}}
           <li data-id="{{this.id}}" class="list-group-item">
-            <a href="example/{{this.id}}">{{this.name}}</a>
-            <a class="btn-floating btn-small waves-effect waves-light red float-right"><i class="material-icons">delete</i></a>
+            <a href="name/{{this.id}}">{{this.name}}</a>
+          <button class="btn btn-danger float-right delete">ｘ</button>
 
           </li>
           {{/each}}
