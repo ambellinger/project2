@@ -4,6 +4,7 @@ module.exports = function(app) {
   // Get all examples
   app.get("/api/Names", function(req, res) {
     db.Names.findAll({}).then(function(names) {
+      //Do I put the join here?
       res.json(names);
     });
   });

@@ -34,8 +34,9 @@ var API = {
 var refreshNames = function() {
   API.getNames().then(function(data) {
     var $names = data.map(function(name) {
+      console.log("testing name.text " + name.text);
       var $a = $("<a>")
-        .name(name.text)
+        .text(name.text)
         .attr("href", "/name/" + name.id);
 
       var $li = $("<li>")
@@ -49,13 +50,19 @@ var refreshNames = function() {
         .addClass("btn btn-danger float-right delete")
         .text("ｘ");
 
-      $li.append($button);
+      var $addlistbutton = $("<button>")
+        .text("Add To Your List")
+        .addClass("list");
 
-      return $li;
+      $li.append($button);
+      $button.append($addlistbutton);
+
+      return $button;
     });
 
     $nameList.empty();
     $nameList.append($names);
+    console.log("testing $names " + $names);
   });
 };
 
@@ -107,7 +114,7 @@ var getName = function() {
     url: url,
     type: "GET",
     success: function(response) {
-      console.log(response);
+      //console.log(response);
 
       $.ajax({
         url: "/api/Names",

@@ -1,20 +1,28 @@
 /* eslint-disable no-unused-vars */
 var db = require("../models");
 var request = require("request");
+var _ = require("lodash");
 
 module.exports = function(app) {
   // Load index page
   app.get("/", function(req, res) {
-    console.log("THIS IS OUR CHECK 1");
+    //console.log("THIS IS OUR CHECK 1");
     db.Names.findAll({}).then(function(name) {
-      console.log("THIS IS OUR CHECK 2");
-      console.log(name);
+      //console.log("THIS IS OUR CHECK 2")
+      //var orderedname1 = _.map(name);
+      //var orderedname2 = _.sortedUniq(orderedname1);
+      console.log("consoling logging" + name);
+      var orderedname = _.uniq(name);
+      //var orderedname = _.map(name);
+      //console.log("testing .uniq" + orderedname);
+      //console.log("testing 2" + orderedname2);
       res.render("index", {
         msg: "BURGER",
-        name: name
+        name: orderedname
       });
     });
   });
+  console.log(_.sortedUniq([1, 1, 2]));
 
   // Load example page and pass in an example by id
   app.get("/Names/:id", function(req, res) {
