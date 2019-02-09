@@ -10,23 +10,14 @@ module.exports = function(app) {
       console.log(dbNames);
       //render is only a handlebars keyword
       res.render("index", {
-
         msg: "Namesake",
-        name: dbNames
-
+        names: dbNames
       });
     });
   });
 
   // Load example page and pass in an example by id
-  // app.get("/name/:id", function(req, res) {
-  //   // eslint-disable-next-line prettier/prettier
-  //   db.Names.findOne({ where: { id: req.params.id } }).then(function(dbName) {
-  //     res.render("name", {
-  //       Names: dbName
-  //     });
-  //   });
-  // });
+
   app.get("/name/:id", function(req, res) {
     db.Origins.findAll({
       where: {

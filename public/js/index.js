@@ -18,7 +18,7 @@ var API = {
       data: JSON.stringify(example)
     });
   },
-//example is the object created in the saveOrigin function, containing the name ID from the table and the information from the external API request
+  //example is the object created in the saveOrigin function, containing the name ID from the table and the information from the external API request
   saveOrigin: function(example) {
     return $.ajax({
       headers: {
@@ -113,11 +113,11 @@ var getName = function(name) {
       //getting data from API, after creating an object, to store on client side in order to use server side
       //server side creates record in MySQL
       API.saveName(name).then(function(response) {
-        //response is the data returned from the 
+        //response is the data returned from the
         refreshNames();
         console.log("nameid:" + response.id);
-      //response.id is the ID from the name table, taken from save name
-      //data is the external API result
+        //response.id is the ID from the name table, taken from save name
+        //data is the external API result
         var origin = {
           usages: data,
           nameid: response.id
@@ -126,8 +126,9 @@ var getName = function(name) {
         console.log(origin.usages[0].usages[0].usage_full);
         console.log(origin.usages[0].usages[0].usage_gender);
         // eslint-disable-next-line no-empty-function
-        // 
-        API.saveOrigin(origin).then(function(response){});
+        //
+        // eslint-disable-next-line no-empty-function
+        API.saveOrigin(origin).then(function(response) {});
       });
       $exampleText.val("");
     }

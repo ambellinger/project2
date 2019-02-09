@@ -1,8 +1,8 @@
 {
   "development": {
-    "username": "root",
-    "password": "Zzcaliforniazhuang",
-    "database": "names_db",
+    "username": "jimmydwyer",
+    "password": "Sn00ganss!23",
+    "database": "namedb",
     "host": "localhost",
     "dialect": "mysql"
   },
