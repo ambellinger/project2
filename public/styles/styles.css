@@ -1,3 +1,44 @@
 .list-group-item {
   line-height: 2.5;
 }
+
+input {
+  color: lightcyan;
+}
+
+#mainheader{
+    font-family: 'Oswald', sans-serif;
+    color: white;
+    padding: 30px;
+    text-align: center;
+    color: rgb(75, 2, 82);
+    font-size: 60px;
+}
+
+#header {
+  font-family: 'Oswald', sans-serif;
+  color: rgb(75, 2, 82);
+}
+
+#changetext{
+  font-family: 'Cardo', serif;
+  color: purple;
+}
+
+
+
+
+#submit{
+  font-family: 'Cardo', serif;
+  
+}
+
+.list-group-item{
+  font-family: 'Cardo', serif;
+}
+
+
+
+body {
+  background-image: url("https://wallpaper.wiki/wp-content/uploads/2017/04/wallpaper.wiki-Download-Free-Aesthetic-HD-Images-PIC-WPC0014083.jpg");
+}

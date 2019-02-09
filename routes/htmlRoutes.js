@@ -10,9 +10,10 @@ module.exports = function(app) {
       console.log(dbNames);
       //render is only a handlebars keyword
       res.render("index", {
-        msg: "Welcome",
-        //records from the table 'Names' when queried, returned as json
-        names: dbNames
+
+        msg: "Namesake",
+        name: dbNames
+
       });
     });
   });
