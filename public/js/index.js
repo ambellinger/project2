@@ -1,8 +1,10 @@
 // Get references to page elements
 var $exampleText = $("#example-text");
+// eslint-disable-next-line no-unused-vars
 var $exampleDescription = $("#example-description");
 var $submitBtn = $("#submit");
-var $exampleList = $("#example-list");
+
+var $nameList = $("#example-list");
 
 // The API object contains methods for each kind of request we'll make
 var API = {
@@ -13,6 +15,17 @@ var API = {
       },
       type: "POST",
       url: "api/names",
+      data: JSON.stringify(example)
+    });
+  },
+//example is the object created in the saveOrigin function, containing the name ID from the table and the information from the external API request
+  saveOrigin: function(example) {
+    return $.ajax({
+      headers: {
+        "Content-Type": "application/json"
+      },
+      type: "POST",
+      url: "/api/origins",
       data: JSON.stringify(example)
     });
   },
@@ -34,22 +47,21 @@ var API = {
 var refreshNames = function() {
   API.getNames().then(function(data) {
     var $names = data.map(function(name) {
+      console.log(name);
       var $a = $("<a>")
-        .name(name.text)
+        .text(name.name)
         .attr("href", "/name/" + name.id);
 
-      var $li = $("<li>")
-        .attr({
-          class: "list-group-item",
-          "data-id": name.id
-        })
-        .append($a);
+      var $li = $("<li>").attr({
+        class: "list-group-item",
+        "data-id": name.id
+      });
 
       var $button = $("<button>")
         .addClass("btn btn-danger float-right delete")
         .text("ｘ");
 
-      $li.append($button);
+      $li.append($a, $button);
 
       return $li;
     });
@@ -64,22 +76,11 @@ var refreshNames = function() {
 // eslint-disable-next-line no-unused-vars
 var handleFormSubmit = function(event) {
   event.preventDefault();
-
-  var name = {
-    name: $exampleText.val().trim()
-  };
-
-  if (!name.text) {
-    alert("You must enter an example text and description!");
-    return;
-  }
-
-  API.saveName(name).then(function() {
-    refreshNames();
-  });
-
-  $exampleText.val("");
-  $exampleDescription.val("");
+  //$exampleText is the input search text, taken as a string and added to the API call URL
+  getName($exampleText.val().trim());
+  // var name = {
+  //   name: $exampleText.val().trim()
+  // gender: $exampleDescriptoin.val().trim()
 };
 
 // handleDeleteBtnClick is called when an example's delete button is clicked
@@ -91,82 +92,75 @@ var handleDeleteBtnClick = function() {
 
   API.deleteName(idToDelete).then(function() {
     refreshNames();
+    // location.reload();
   });
 };
 
-var getName = function() {
+var getName = function(name) {
   event.preventDefault();
-  var apiKey = "ji598704009";
-  var name = $exampleText.val().trim();
-  var url =
-    "https://www.behindthename.com/api/lookup.json?name=" +
-    name +
-    "&key=" +
-    apiKey;
-  $.ajax({
-    url: url,
-    type: "GET",
-    success: function(response) {
-      console.log(response);
 
-      $.ajax({
-        url: "/api/Names",
-        type: "POST",
-        data: { name: response[0].name, gender: response[0].gender },
-        success: function() {
-          // console.log(response);
-        }
+  $.ajax({
+    url: "api/behindnames/" + name,
+    type: "GET",
+    success: function(data) {
+      console.log("behind names: " + data[0].name);
+
+      var name = {
+        // PROPERTIES & METHODS ONLY (no methods today)
+        name: data[0].name,
+        gender: data[0].gender
+      };
+      //getting data from API, after creating an object, to store on client side in order to use server side
+      //server side creates record in MySQL
+      API.saveName(name).then(function(response) {
+        //response is the data returned from the 
+        refreshNames();
+        console.log("nameid:" + response.id);
+      //response.id is the ID from the name table, taken from save name
+      //data is the external API result
+        var origin = {
+          usages: data,
+          nameid: response.id
+        };
+
+        console.log(origin.usages[0].usages[0].usage_full);
+        console.log(origin.usages[0].usages[0].usage_gender);
+        // eslint-disable-next-line no-empty-function
+        // 
+        API.saveOrigin(origin).then(function(response){});
       });
+      $exampleText.val("");
     }
   });
 };
 
-// var postName = function() {
-//   event.preventDefault();
+// var randomMName = function() {
 //   var apiKey = "ji598704009";
-//   var name = $exampleText.val().trim();
 //   var url =
-//     "https://www.behindthename.com/api/lookup.json?name=" +
-//     name +
-//     "&key=" +
+//     "https://www.behindthename.com/api/random.json?usage=ita&gender=m&key=" +
 //     apiKey;
 //   $.ajax({
-//     url: "/api/Names",
-//     type: "POST",
-//     data: {name: "Test", gender:"f"}
+//     url: url,
+//     type: "GET",
 //     success: function(response) {
-//       // console.log(response);
+//       console.log(response.names[0]);
 //     }
 //   });
 // };
 
-var randomMName = function() {
-  var apiKey = "ji598704009";
-  var url =
-    "https://www.behindthename.com/api/random.json?usage=ita&gender=m&key=" +
-    apiKey;
-  $.ajax({
-    url: url,
-    type: "GET",
-    success: function(response) {
-      console.log(response.names[0]);
-    }
-  });
-};
-
-var randomFName = function() {
-  var apiKey = "ji598704009";
-  var url =
-    "https://www.behindthename.com/api/random.json?usage=ita&gender=f&key=" +
-    apiKey;
-  $.ajax({
-    url: url,
-    type: "GET",
-    success: function(response) {
-      console.log(response.names[0]);
-    }
-  });
-};
+// var randomFName = function() {
+//   var apiKey = "ji598704009";
+//   var url =
+//     "https://www.behindthename.com/api/random.json?usage=ita&gender=f&key=" +
+//     apiKey;
+//   $.ajax({
+//     url: url,
+//     type: "GET",
+//     success: function(response) {
+//       console.log(response.names[0]);
+//     }
+//   });
+// };
 
 // var getRelated = function() {
 //   event.preventDefault();
@@ -187,8 +181,9 @@ var randomFName = function() {
 // };
 
 // Add event listeners to the submit and delete buttons
-window.onload = randomMName();
-window.onload = randomFName();
-$submitBtn.on("click", getName);
+// window.onload = randomMName();
+// window.onload = randomFName();
+$submitBtn.on("click", handleFormSubmit);
+// $submitBtn.on("click", handleFormSubmit);
 // $submitBtn.on("click", getRelated);
-$exampleList.on("click", ".delete", handleDeleteBtnClick);
+$nameList.on("click", ".delete", handleDeleteBtnClick);

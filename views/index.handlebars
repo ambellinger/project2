@@ -16,6 +16,7 @@
             <label for="example-text" id="changetext">Name</label>
             <input type="text" id="changetext" class="form-control" aria-describedby="example-text" placeholder="Enter Name">
           </div>
+
           <button id="submit" class="waves-effect waves-light btn">Submit <i class="material-icons right">send</i></button>
   </div>
         {{!-- Div for popular names --}}
@@ -24,8 +25,9 @@
         <ul id="recent" class="list-group">
           {{#each name}}
           <li data-id="{{this.id}}" class="list-group-item">
-            <a href="Names/{{this.id}}">{{this.name}}</a>
+            <a href="name/{{this.id}}">{{this.name}}</a>
             <a class="btn-floating btn-small waves-effect waves-light red float-right"><i class="material-icons">delete</i></a>
+
           </li>
           {{/each}}
         </ul>
