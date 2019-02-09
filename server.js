@@ -7,9 +7,13 @@ var db = require("./models");
 var app = express();
 var PORT = process.env.PORT || 3000;
 
-// Middleware
-app.use(express.urlencoded({ extended: false }));
+// Middleware allows the client data to be translated into json, storing result of the translation in req.body
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
+//this public makes the public folder the root level of your URL path
+//this is important for handlebars to access any of the other files in that level
+//this is not file structure but URL path
 app.use(express.static("public"));
 
 // Handlebars

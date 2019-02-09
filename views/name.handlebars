@@ -4,6 +4,7 @@
       <div class="card mt-4">
         <div class="card-body">
           <h5 class="card-title">Example</h5>
+          {{!-- FOR The created list. Make a new file! --}}
           {{#if list = "true"}}
           <p>
             <strong>ID</strong>: {{names.id}}</p>
@@ -13,6 +14,18 @@
           <p>
           </p>
           {{/if}}
+
+          {{!-- FOR NAME --}}
+           {{#each origins}}
+         
+              
+             <p>
+               <strong>Origin</strong>: {{this.origin}}</p>
+
+                <p>
+               <strong>Gender</strong>: {{this.origingender}}</p>
+
+                 {{/each}}
             <a href="/">← Back To Home</a>
         </div>
       </div>
