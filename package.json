@@ -12,20 +12,23 @@
   "license": "ISC",
   "dependencies": {
     "dotenv": "^6.2.0",
-    "express": "^4.16.3",
+    "express": "^4.16.4",
     "express-handlebars": "^3.0.0",
-    "mysql2": "^1.6.4",
+    "mysql2": "^1.6.5",
     "request": "^2.88.0",
+    "semantic-ui": "^2.4.2",
+    "semantic-ui-css": "^2.4.1",
+    "semantic-ui-react": "^0.85.0",
     "sequelize": "^4.41.2"
   },
   "devDependencies": {
-    "chai": "^4.1.2",
-    "chai-http": "^4.0.0",
+    "chai": "^4.2.0",
+    "chai-http": "^4.2.1",
     "cross-env": "^5.2.0",
     "eslint": "^4.19.1",
     "eslint-config-prettier": "^2.9.0",
-    "eslint-plugin-prettier": "^2.6.2",
+    "eslint-plugin-prettier": "^2.7.0",
     "mocha": "^5.2.0",
-    "prettier": "^1.13.7"
+    "prettier": "^1.16.4"
   }
 }

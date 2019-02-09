@@ -10,7 +10,7 @@ module.exports = function(app) {
       console.log("THIS IS OUR CHECK 2");
       console.log(name);
       res.render("index", {
-        msg: "BURGER",
+        msg: "Namesake",
         name: name
       });
     });
