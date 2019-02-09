@@ -7,21 +7,6 @@ module.exports = function(app) {
   // Loads home (root) page
   //using get request at root level gets table information because of the '/'
   app.get("/", function(req, res) {
-<<<<<<< HEAD
-    //console.log("THIS IS OUR CHECK 1");
-    db.Names.findAll({}).then(function(name) {
-      //console.log("THIS IS OUR CHECK 2")
-      //var orderedname1 = _.map(name);
-      //var orderedname2 = _.sortedUniq(orderedname1);
-      console.log("consoling logging" + name);
-      var orderedname = _.uniq(name);
-      //var orderedname = _.map(name);
-      //console.log("testing .uniq" + orderedname);
-      //console.log("testing 2" + orderedname2);
-      res.render("index", {
-        msg: "BURGER",
-        name: orderedname
-=======
     db.Names.findAll({}).then(function(dbNames) {
       console.log(dbNames);
       //render is only a handlebars keyword
@@ -29,11 +14,25 @@ module.exports = function(app) {
         msg: "Welcome",
         //records from the table 'Names' when queried, returned as json
         names: dbNames
->>>>>>> master
       });
     });
   });
-  console.log(_.sortedUniq([1, 1, 2]));
+
+  app.get("/list", function(req, res) {
+    db.Names.findAll({ list: true }).then(function(dbNames) {
+      console.log(dbNames);
+      //render is only a handlebars keyword
+      res.render("index", {
+        msg: "Your List",
+        //records from the table 'Names' when queried, returned as json
+        names: dbNames
+      });
+    });
+  });
+
+
+
+  //console.log(_.sortedUniq([1, 1, 2]));
 
   // Load example page and pass in an example by id
   // app.get("/name/:id", function(req, res) {

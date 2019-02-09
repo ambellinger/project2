@@ -9,13 +9,6 @@ var keys = require("../keys");
 
 module.exports = function(app) {
   // Get all examples
-<<<<<<< HEAD
-  app.get("/api/Names", function(req, res) {
-    db.Names.findAll({}).then(function(names) {
-      //Do I put the join here?
-      res.json(names);
-    });
-=======
   app.get("/api/behindnames/:name", function(req, res) {
     //this search is off of query parameters on URL path, using the name input box & search value
     let search = req.params.name;
@@ -29,7 +22,6 @@ module.exports = function(app) {
         res.json(response.data)
         }
     );
->>>>>>> master
   });
 //this call gets all of the names from the Names table
   app.get("/api/names", function(req, res) {
