@@ -64,4 +64,18 @@ module.exports = function(app) {
       res.json(dbNames);
     });
   });
+
+
+app.put("/api/list", function(req, res) {
+  db.Names.update({ 
+    list: false
+  }, {
+    where: {
+      id: req.params.id
+    } 
+  }).then(function(dbNames){
+      res.json(dbNames);
+  });
+})
+
 };

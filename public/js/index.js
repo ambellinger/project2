@@ -3,7 +3,7 @@ var $exampleText = $("#example-text");
 // eslint-disable-next-line no-unused-vars
 var $exampleDescription = $("#example-description");
 var $submitBtn = $("#submit");
-
+var $listBtn = $("#list");
 var $nameList = $("#example-list");
 
 // The API object contains methods for each kind of request we'll make
@@ -65,8 +65,8 @@ var refreshNames = function() {
         .text("Add To Your List")
         .addClass("list");
 
-      $li.append($button);
-      $button.append($addlistbutton);
+      $li.append($a, $button, $addlistbutton);
+     // $button.append($addlistbutton);
 
       return $button;
     });
@@ -99,6 +99,17 @@ var handleDeleteBtnClick = function() {
   API.deleteName(idToDelete).then(function() {
     refreshNames();
     // location.reload();
+  });
+};
+
+//handleListBtnClick is called when add to list button is clicked
+//Update the record from the db and refresh the list
+
+var handleListBtnClick = function() {
+  $.ajax({
+    method: "PUT",
+    url: "/api/list",
+    data: list
   });
 };
 
@@ -189,6 +200,7 @@ var getName = function(name) {
 // Add event listeners to the submit and delete buttons
 // window.onload = randomMName();
 // window.onload = randomFName();
+$listBtn.on("click", handleListBtnClick);
 $submitBtn.on("click", handleFormSubmit);
 // $submitBtn.on("click", handleFormSubmit);
 // $submitBtn.on("click", getRelated);

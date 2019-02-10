@@ -13,15 +13,8 @@
         <h2 id="header">Search for a Name!</h2>
         <form class="clearfix mb-4" action="POST">
           <div class="form-group">
-<<<<<<< HEAD
-
-        <h2><a href="list">View your list</a></h2>
-            <label for="example-text">Example Text</label>
-            <input type="text" id="example-text" class="form-control" aria-describedby="example-text" placeholder="Enter Example Text">
-=======
             <label for="example-text" id="changetext">Name</label>
             <input type="text" id="changetext" class="form-control" aria-describedby="example-text" placeholder="Enter Name">
->>>>>>> master
           </div>
 
           <button id="submit" class="waves-effect waves-light btn">Submit <i class="material-icons right">send</i></button>
@@ -32,25 +25,16 @@
         <ul id="recent" class="list-group">
           {{#each name}}
           <li data-id="{{this.id}}" class="list-group-item">
-            <a href="name/{{this.id}}">{{this.name}}</a>
-<<<<<<< HEAD
-            <button class="btn btn-danger float-right delete">ｘ</button>
-            <button class="btn btn-success float-right list">Add to Your List</button>
+             <a href="name/{{this.id}}">{{this.name}}</a>
+          <button class="btn btn-danger float-right delete">ｘ</button>
+            <button class="btn btn-success float-right list" id="list">Add to Your List</button>
           </li>
           {{/each}}
         </ul>
 
-        
-=======
-            <a class="btn-floating btn-small waves-effect waves-light red float-right"><i class="material-icons">delete</i></a>
-
-          </li>
-          {{/each}}
-        </ul>
-        </div>
-
->>>>>>> master
-
+        {{!-- View Saved List --}}
+         <h3 id="header"><a href="/list">View Saved List</a></h3>
+         
       </div>
     </div>
   </div>

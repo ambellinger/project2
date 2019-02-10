@@ -19,21 +19,17 @@ module.exports = function(app) {
     });
   });
 
-  app.get("/list", function(req, res) {
-    db.Names.findAll({ list: true }).then(function(dbNames) {
-      console.log(dbNames);
-      //render is only a handlebars keyword
-      res.render("index", {
-        msg: "Your List",
-        //records from the table 'Names' when queried, returned as json
-        names: dbNames
-      });
-    });
+   app.get("/list", function(req, res) {
+     db.Names.findAll({ list: true }).then(function(dbNames) {
+       console.log(dbNames);
+       //render is only a handlebars keyword
+       res.render("index", {
+         msg: "Your List",
+         //records from the table 'Names' when queried, returned as json
+         names: dbNames
+       });
+     });
   });
-
-
-
-  //console.log(_.sortedUniq([1, 1, 2]));
 
   // Load example page and pass in an example by id
   // app.get("/name/:id", function(req, res) {
