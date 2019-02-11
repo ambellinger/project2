@@ -35,16 +35,16 @@ var API = {
       type: "GET"
     });
   },
-  deleteName: function(id) {
+  deleteName: function() {
     return $.ajax({
-      url: "api/names/" + id,
+      url: "api/names/",
       type: "DELETE"
     });
   },
 
-  updateName: function() {
+  updateName: function(id) {
     return $.ajax({
-      url: "/api/list",
+      url: "/api/list" + id,
       type: "PUT"
     });
   }
@@ -117,6 +117,7 @@ var handleListBtnClick = function(list) {
     .attr("data-id");
 
   API.updateName(idToUpdate).then(function() {
+    console.log("updating name...");
     refreshNames();
   });
   //API.updateName(list);

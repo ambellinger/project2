@@ -14,10 +14,10 @@ module.exports = function (app) {
     var search = req.params.name;
     //APIKey is your actual key, hidden in the .env
     var APIKey = keys.KEY;
-    console.log(APIKey);
+    //console.log(APIKey);
     axios.get(`https://www.behindthename.com/api/lookup.json?name=${search}&key=${APIKey}`).then(
       function (response) {
-        console.log(response.data);
+       //console.log(response.data);
 
         res.json(response.data)
       }
@@ -40,9 +40,9 @@ module.exports = function (app) {
   });
   //req.body from the middleware which has been translated into json, using the .usage operator to find the many results if a name has them.
   app.post("/api/origins", function (req, res) {
-    console.log("data:" + req.body.usages);
+    //console.log("data:" + req.body.usages);
 
-    console.log("nameid:" + req.body.nameid);
+    //console.log("nameid:" + req.body.nameid);
 
     for (var i = 0; i < req.body.usages[0].usages.length; i++) {
 
