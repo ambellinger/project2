@@ -40,6 +40,13 @@ var API = {
       url: "api/names/" + id,
       type: "DELETE"
     });
+  },
+
+  updateName: function() {
+    return $.ajax({
+      url: "/api/list",
+      type: "PUT"
+    });
   }
 };
 
@@ -104,13 +111,22 @@ var handleDeleteBtnClick = function() {
 //handleListBtnClick is called when add to list button is clicked
 //Update the record from the db and refresh the list
 
-var handleListBtnClick = function() {
-  //   $.ajax({
-  //     method: "PUT",
-  //     url: "/api/list",
-  //     data: list
-  //   });
-  console.log("list button was clicked");
+var handleListBtnClick = function(list) {
+  var idToUpdate = $(this)
+    .parent()
+    .attr("data-id");
+
+  API.updateName(idToUpdate).then(function() {
+    refreshNames();
+  });
+  //API.updateName(list);
+  // $.ajax({
+  //   method: "PUT",
+  //   url: "/api/list",
+  //   data: list
+  // }).then(console.log("list button was clicked"));
+
+  console.log("button clicked");
 };
 
 var getName = function(name) {

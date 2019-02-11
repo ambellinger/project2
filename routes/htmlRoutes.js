@@ -7,7 +7,7 @@ module.exports = function(app) {
   //using get request at root level gets table information because of the '/'
   app.get("/", function(req, res) {
     db.Names.findAll({}).then(function(dbNames) {
-      console.log(dbNames);
+      //console.log(dbNames);
       //render is only a handlebars keyword
       res.render("index", {
         msg: "Namesake",
@@ -32,8 +32,8 @@ module.exports = function(app) {
 
   //LIST STUFF!!!!!!!!!!!!//
   app.get("/list/", function(req, res) {
-    db.Names.findAll({ list: true }).then(function(dbNames) {
-      console.log(dbNames);
+    db.Names.findAll({}).then(function(dbNames) {
+      //console.log(dbNames);
       //render is only a handlebars keyword
       res.render("list", {
         msg: "Your List",
