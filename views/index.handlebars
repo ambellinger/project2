@@ -1,45 +1,49 @@
-
 <div id="home">
   <div class="container">
     <div class="row">
       <div class="col-8 offset-2">
 
-{{!-- Creates the Top Part//Header --}}
+        {{!-- Creates the Top Part//Header --}}
 
-      <h1 id="mainheader">{{msg}}</h1>
-  {{!-- Area for the search --}}
+        <h1 id="mainheader">{{msg}}</h1>
+        {{!-- Area for the search --}}
 
-  <div class="container">
-        <h2 id="header">Search for a Name!</h2>
-        <form class="clearfix mb-4" action="POST">
-          <div class="form-group">
-            <label for="example-text" id="changetext">Name</label>
-            <input type="text" id="changetext" class="form-control" aria-describedby="example-text" placeholder="Enter Name">
-          </div>
+        <div class="container">
+          <h2 id="header">Search for a Name!</h2>
+          <form class="clearfix mb-4" action="POST">
+            <div class="form-group">
+              <label for="example-text">Name</label>
+              <input type="text" id="example-text" class="form-control" aria-describedby="example-text"
+                placeholder="Enter Name">
+            </div>
 
-          <button id="submit" class="waves-effect waves-light btn">Submit <i class="material-icons right">send</i></button>
-  </div>
+            <button id="submit" class="waves-effect waves-light btn">Search<i
+                class="material-icons right">send</i></button>
+          </form>
+        </div>
         {{!-- Div for popular names --}}
         <div class="container" id="popular">
-        <h3 id="header">Most Recently Searched:</h3>
-        <ul id="recent" class="list-group">
-          {{#each name}}
-          <li data-id="{{this.id}}" class="list-group-item">
-             <a href="name/{{this.id}}">{{this.name}}</a>
-          <button class="btn btn-danger float-right delete">ｘ</button>
-            <button class="btn btn-success float-right list" id="list">Add to Your List</button>
-          </li>
-          {{/each}}
-        </ul>
+          <h3 id="header">Most Recently Searched:</h3>
+          <ul id="example-list" class="list-group">
+            {{#each names}}
+            <li data-id="{{this.id}}" class="list-group-item">
+              <a href="name/{{this.id}}">{{this.name}}</a>
+              <button class="btn btn-danger float-right delete">ｘ</button>
+              <button class="btn btn-success float-right list" id="list">Add to Your List</button>
+            </li>
+            {{/each}}
+          </ul>
 
-        {{!-- View Saved List --}}
-         <h3 id="header"><a href="/list">View Saved List</a></h3>
-         
+          {{!-- View Saved List --}}
+          <h3 id="header"><a href="list/">View Saved List</a></h3>
+        </div>
+
+
       </div>
     </div>
   </div>
 </div>
 
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> 
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 <script src="/js/index.js"></script>

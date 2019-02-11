@@ -18,7 +18,7 @@ var API = {
       data: JSON.stringify(example)
     });
   },
-//example is the object created in the saveOrigin function, containing the name ID from the table and the information from the external API request
+  //example is the object created in the saveOrigin function, containing the name ID from the table and the information from the external API request
   saveOrigin: function(example) {
     return $.ajax({
       headers: {
@@ -66,14 +66,12 @@ var refreshNames = function() {
         .addClass("list");
 
       $li.append($a, $button, $addlistbutton);
-     // $button.append($addlistbutton);
 
-      return $button;
+      return $li;
     });
 
     $nameList.empty();
     $nameList.append($names);
-    console.log("testing $names " + $names);
   });
 };
 
@@ -102,15 +100,17 @@ var handleDeleteBtnClick = function() {
   });
 };
 
+//LIST STUFF!!!!!!!!!!!!!//
 //handleListBtnClick is called when add to list button is clicked
 //Update the record from the db and refresh the list
 
 var handleListBtnClick = function() {
-  $.ajax({
-    method: "PUT",
-    url: "/api/list",
-    data: list
-  });
+  //   $.ajax({
+  //     method: "PUT",
+  //     url: "/api/list",
+  //     data: list
+  //   });
+  console.log("list button was clicked");
 };
 
 var getName = function(name) {
@@ -130,11 +130,11 @@ var getName = function(name) {
       //getting data from API, after creating an object, to store on client side in order to use server side
       //server side creates record in MySQL
       API.saveName(name).then(function(response) {
-        //response is the data returned from the 
+        //response is the data returned from the
         refreshNames();
         console.log("nameid:" + response.id);
-      //response.id is the ID from the name table, taken from save name
-      //data is the external API result
+        //response.id is the ID from the name table, taken from save name
+        //data is the external API result
         var origin = {
           usages: data,
           nameid: response.id
@@ -143,8 +143,9 @@ var getName = function(name) {
         console.log(origin.usages[0].usages[0].usage_full);
         console.log(origin.usages[0].usages[0].usage_gender);
         // eslint-disable-next-line no-empty-function
-        // 
-        API.saveOrigin(origin).then(function(response){});
+        //
+        // eslint-disable-next-line no-empty-function
+        API.saveOrigin(origin).then(function(response) {});
       });
       $exampleText.val("");
     }
@@ -200,8 +201,8 @@ var getName = function(name) {
 // Add event listeners to the submit and delete buttons
 // window.onload = randomMName();
 // window.onload = randomFName();
-$listBtn.on("click", handleListBtnClick);
 $submitBtn.on("click", handleFormSubmit);
+$listBtn.on("click", handleListBtnClick);
 // $submitBtn.on("click", handleFormSubmit);
 // $submitBtn.on("click", getRelated);
 $nameList.on("click", ".delete", handleDeleteBtnClick);

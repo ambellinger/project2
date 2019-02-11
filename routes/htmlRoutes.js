@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
 var db = require("../models");
 var request = require("request");
-var _ = require("lodash");
 
 module.exports = function(app) {
   // Loads home (root) page
@@ -11,35 +10,14 @@ module.exports = function(app) {
       console.log(dbNames);
       //render is only a handlebars keyword
       res.render("index", {
-
         msg: "Namesake",
-        name: dbNames
-
+        names: dbNames
       });
     });
   });
 
-   app.get("/list", function(req, res) {
-     db.Names.findAll({ list: true }).then(function(dbNames) {
-       console.log(dbNames);
-       //render is only a handlebars keyword
-       res.render("index", {
-         msg: "Your List",
-         //records from the table 'Names' when queried, returned as json
-         names: dbNames
-       });
-     });
-  });
-
   // Load example page and pass in an example by id
-  // app.get("/name/:id", function(req, res) {
-  //   // eslint-disable-next-line prettier/prettier
-  //   db.Names.findOne({ where: { id: req.params.id } }).then(function(dbName) {
-  //     res.render("name", {
-  //       Names: dbName
-  //     });
-  //   });
-  // });
+
   app.get("/name/:id", function(req, res) {
     db.Origins.findAll({
       where: {
@@ -48,6 +26,19 @@ module.exports = function(app) {
     }).then(function(data) {
       res.render("name", {
         origins: data
+      });
+    });
+  });
+
+  //LIST STUFF!!!!!!!!!!!!//
+  app.get("/list/", function(req, res) {
+    db.Names.findAll({ list: true }).then(function(dbNames) {
+      console.log(dbNames);
+      //render is only a handlebars keyword
+      res.render("list", {
+        msg: "Your List",
+        //records from the table 'Names' when queried, returned as json
+        names: dbNames
       });
     });
   });

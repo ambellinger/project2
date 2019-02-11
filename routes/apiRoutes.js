@@ -1,6 +1,6 @@
 var db = require("../models");
 
-const axios = require("axios");
+var axios = require("axios");
 //Jim, since we rename Name to Names, db will not recognize db.Name anymore.
 //Now db will only see db.Names
 //This means you have to change anywhere it reference db.Name to db.Names
@@ -11,9 +11,9 @@ module.exports = function(app) {
   // Get all examples
   app.get("/api/behindnames/:name", function(req, res) {
     //this search is off of query parameters on URL path, using the name input box & search value
-    let search = req.params.name;
+    var search = req.params.name;
     //APIKey is your actual key, hidden in the .env
-    let APIKey = keys.KEY;
+    var APIKey = keys.KEY;
     console.log(APIKey);
     axios.get(`https://www.behindthename.com/api/lookup.json?name=${search}&key=${APIKey}`).then(
       function(response) {
@@ -64,18 +64,19 @@ module.exports = function(app) {
       res.json(dbNames);
     });
   });
-
-
-app.put("/api/list", function(req, res) {
-  db.Names.update({ 
-    list: false
-  }, {
-    where: {
-      id: req.params.id
-    } 
-  }).then(function(dbNames){
-      res.json(dbNames);
-  });
-})
-
 };
+
+//LIST STUFF!!!!!!!!!!!!!!!!!!!!!!//
+// app.put("/api/list", function(req, res) {
+//   db.Names.update({ 
+//     list: false
+//   }, {
+//     where: {
+//       id: req.params.id
+//     } 
+//   }).then(function(dbNames){
+//       res.json(dbNames);
+//   });
+// })
+
+// };
