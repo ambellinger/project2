@@ -44,7 +44,7 @@ var API = {
 
   updateName: function(id) {
     return $.ajax({
-      url: "/api/list" + id,
+      url: "/api/list/" + id,
       type: "PUT"
     });
   }

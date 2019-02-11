@@ -68,16 +68,16 @@ module.exports = function (app) {
 
 
 //LIST STUFF!!!!!!!!!!!!!!!!!!!!!!//
-app.put("/api/list", function (req, res) {
+app.put("/api/list/:id", function (req, res) {
   db.Names.update({
-    list: false
+    list: 1
   }, {
-      where: {
-        id: req.params.id
-      }
-    }).then(function (dbNames) {
-      res.json(dbNames);
-    });
+    where: {
+      id: req.params.id 
+    }
+  }).then(function(dbTodo) {
+    res.json(dbTodo);
+  });
 });
 
 };
