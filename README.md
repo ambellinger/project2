@@ -23,151 +23,308 @@ Namesake provides users the ability to research names to discover their orgins a
 * NPM install (See Tech Used section above)
 * SQL database
 
-## How Does It Work?
-The initial step in creating the app was establishing the MVC (Model-View-Controller) setup. The MVC in layman's terms is an organizational, architectural pattern used to allow for cleaner code that is easier to analyze and easier for a team of developers to work simultaneously. For Namesake, instead of the controller, we used routes. Within the routes folder, we stared the code to connect to the api as well as the code to connect the html pages. 
+## What does it do?
 
-Within the Models folder, we also placed the code necessary to login into the database and utilize sequelize language. The server.js was then created to connect the routes, set up handlebars, and establish the middleware, code which acts as a bridge between the client and server sides of the application. Also within the server.js file, we created the code necessary to listen to the port. 
+![home-page](public/styles/images/namesakehomepage.PNG)
 
-Once the MVC and the server are created, we utilized sequelize to generate two seperate tables for the names and the origins. The origin's foreign key refers to the primary key of the name due to the one to many relationship between a name and its possible mulitible origins. 
+User can type in names, delete the names that appear by clicking the 'x', and then add them to a list.
 
-The next step was the connect to the Behind the Name API.
+![list-page](public/styles/images/namesakelist.PNG)
+The list page shows the user all the names they saved.
 
+## How did we set it up?
+The initial step in creating the app was establishing the MVC (Model-View-Controller) setup. The MVC in layman's terms is an organizational, architectural pattern used to allow for cleaner code that is easier to analyze and easier for a team of developers to work simultaneously. For Namesake, instead of controller, we used routes. Within the routes folder, we started the code to connect to the api as well as the code to connect the html pages. 
 
-
-After the connection is established, the program will run the function to start.
-
+### Connecting to the API
 ``` 
-var connection = mysql.createConnection({
-  host: "localhost",
+module.exports = function (app) {
+  // Get all examples
+  app.get("/api/behindnames/:name", function (req, res) {
+    //this search is off of query parameters on URL path, using the name input box & search value
+    var search = req.params.name;
+    //APIKey is your actual key, hidden in the .env
+    var APIKey = keys.KEY;
+    axios.get(`https://www.behindthename.com/api/lookup.json?name=${search}&key=${APIKey}`).then(
+      function (response) {
+        res.json(response.data)
+      }
+    );
+  });
 
-  // Your port; if not 3306
-  port: 3306,
+```
 
-  // Your username
-  user: "root",
+Within the Models folder, we also placed the code necessary to login into the database and utilize sequelize language.
 
-  // Your password
-  password: "$$$$$",
-  database: "nameDB"
+
+### Logging into the database utilizing Sequelize
+```
+"use strict";
+
+var fs = require("fs");
+var path = require("path");
+var Sequelize = require("sequelize");
+var basename = path.basename(module.filename);
+var env = process.env.NODE_ENV || "development";
+var config = require(__dirname + "/../config/config.json")[env];
+var db = {};
+
+if (config.use_env_variable) {
+  var sequelize = new Sequelize(process.env[config.use_env_variable]);
+} else {
+  var sequelize = new Sequelize(
+    config.database,
+    config.username,
+    config.password,
+    config
+  );
+}
+
+fs.readdirSync(__dirname)
+  .filter(function(file) {
+    return (
+      file.indexOf(".") !== 0 && file !== basename && file.slice(-3) === ".js"
+    );
+  })
+  .forEach(function(file) {
+    var model = sequelize.import(path.join(__dirname, file));
+    db[model.name] = model;
+  });
+
+Object.keys(db).forEach(function(modelName) {
+  if (db[modelName].associate) {
+    db[modelName].associate(db);
+  }
 });
 
-connection.connect(function (err) {
-  if (err) throw err;
-  // run the start function after the connection is made 
-  start();
+db.sequelize = sequelize;
+db.Sequelize = Sequelize;
+
+module.exports = db;
+
+```
+
+ The server.js was then created to connect the routes, set up handlebars, and establish the middleware--code which acts as a bridge between the client and server sides of the application.
+ 
+```
+require("dotenv").config();
+var express = require("express");
+var exphbs = require("express-handlebars");
+var db = require("./models");
+var app = express();
+var PORT = process.env.PORT || 3000;
+
+// Middleware allows the client data to be translated into json, storing result of the translation in req.body
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+//this public makes the public folder the root level of your URL path
+//this is important for handlebars to access any of the other files in that level
+//this is not file structure but URL path
+app.use(express.static("public"));
+
+// Handlebars
+app.engine(
+  "handlebars",
+  exphbs({
+    defaultLayout: "main"
+  })
+);
+app.set("view engine", "handlebars");
+
+// Routes
+require("./routes/apiRoutes")(app);
+require("./routes/htmlRoutes")(app);
+
+var syncOptions = { force: false };
+
+// If running a test, set syncOptions.force to true
+// clearing the `testdb`
+if (process.env.NODE_ENV === "test") {
+  syncOptions.force = true;
+}
+
+```
+
+Also within the server.js file, we created the code necessary to listen to the port. 
+
+```
+// Starting the server, syncing our models ------------------------------------/
+db.sequelize.sync(syncOptions).then(function() {
+  app.listen(PORT, function() {
+    console.log(
+      "==> 🌎  Listening on port %s. Visit http://localhost:%s/ in your browser.",
+      PORT,
+      PORT
+    );
+  });
 });
 
+module.exports = app;
+
+```
+
+Once the MVC and the server are created, we utilized sequelize to generate two seperate tables for the names and the origins.
+
+The list field is used to help users save names to a list. The default value is set to false.
+
+### Names table
+```
+module.exports = function(sequelize, DataTypes) {
+  var Names = sequelize.define("Names", {
+    name: DataTypes.STRING,
+    gender: DataTypes.TEXT,
+    list: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    }
+  });
+
+  Names.associate = function(models) {
+    Names.hasMany(models.Origins, {
+      onDelete: "cascade"
+    });
+  };
+
+  return Names;
+};
 
 ```
 
 
-
-The user is then presented with the products available in the database
-
-``` 
- connection.query("SELECT * FROM products", function (err, result, fields) {
-    if (err) throw err;
-    //console.log(result);
-    console.table(result);
-```
-### Beginning the Program
-
-![beginning-program](/images/bamazon_beginning_program.PNG)
-
-
-Inquirer (NPM) is then used to save the user's input. 
+The origin's foreign key refers to the primary key of the name tables due to the one to many relationship between a name and its possible mulitible origins. 
 
 ```
- inquirer
-      .prompt([
-        {
-          name: "choice",
-          message: "What is the ID of the item you would like to purchase? [Quit with Q]",
-          type: "input"
-        },
-        {
-          name: "quantity",
-          type: "input",
-          message: "How many would you like? [Quit with Q]"
-        }
-      ])
+module.exports = function(sequelize, DataTypes) {
+  var Origins = sequelize.define("Origins", {
+    origin: DataTypes.STRING,
+    origingender: DataTypes.STRING
+  });
+
+  Origins.associate = function(models) {
+    Origins.belongsTo(models.Names, {
+      foreignKey: {
+        allowNull: false
+      }
+    });
+  };
+  return Origins;
+};
+```
+
+The next step was to utilize the connection to the Behind the Name API via axios in the apiroutes file. On the client side, we created methods inside of an API object that worked with the returned data to save the name, the name's origins, to display the names on the webpage, delete the names, and update the name record--a function that is necessary for us to later save it into a list. 
+
+```
+var API = {
+  saveName: function(example) {
+    return $.ajax({
+      headers: {
+        "Content-Type": "application/json"
+      },
+      type: "POST",
+      url: "api/names",
+      data: JSON.stringify(example)
+    });
+  },
+  //Example is the object created in the saveOrigin function, containing the name ID from the table and the information from the external API request
+  saveOrigin: function(example) {
+    return $.ajax({
+      headers: {
+        "Content-Type": "application/json"
+      },
+      type: "POST",
+      url: "/api/origins",
+      data: JSON.stringify(example)
+    });
+  },
+  getNames: function() {
+    return $.ajax({
+      url: "api/names",
+      type: "GET"
+    });
+  },
+  deleteName: function(id) {
+    return $.ajax({
+      url: "api/names/" + id,
+      type: "DELETE"
+    });
+  },
+
+  updateName: function(id) {
+    return $.ajax({
+      url: "api/list/" + id,
+      type: "PUT"
+    });
+  }
+};
 
 ```
 
-The program then saves these choices and then compares their answers to the information stored in the database. 
+We then created functions that would pull user input and clicks to then call on these methods. Among these were the submit button, that takes the information written in the search box, the delete button, and the add to list button. 
+
+### Code for the delete button
 
 ```
-.then(function (answer) {
+var handleDeleteBtnClick = function() {
+  var idToDelete = $(this)
+    .parent()
+    .attr("data-id");
 
-        //For loop
-        for (var i = 0; i < result.length; i++) {
-          if (result[i].item_id === parseInt(answer.choice)) {
-            chosenProduct = result[i];
-            console.log("This is the result:" + chosenProduct);
-          }
+  API.deleteName(idToDelete).then(function() {
+    refreshNames();
+  });
+};
+
+$nameList.on("click", ".delete", handleDeleteBtnClick);
+
+```
+
+Within the getName method, we added another ajax call that pulls the unique orgins and saves them into an object which will then be saved into the origin table on the server side.
+
+```
+  API.saveName(name).then(function(response) {
+        //response is the data returned
+        refreshNames();
+        console.log("nameid:" + response.id);
+        //response.id is the ID from the name table, taken from save name
+        //data is the external API result
+        var origin = {
+          usages: data,
+          nameid: response.id
         };
 
-```
-
-The price is calculated by multiplying the amount given by the user and the price saved in the database.
-
-```
- var total = chosenAmount * chosenProduct.price;
- console.log("Your total is: $" + total);
-```
-
-The database is then updated with the new amounts
+        console.log(origin.usages[0].usages[0].usage_full);
+        console.log(origin.usages[0].usages[0].usage_gender);
+        API.saveOrigin(origin).then(function(response) {});
+      });
 
 ```
-    connection.query(
-            "UPDATE products SET ? WHERE ?",
-            [
-              {
-                stock_quantity: newStock
-              },
-              {
-                item_id: chosenId
-              }
-            ],
-            function (error) {
-              if (error) throw err;
-              console.log("Stock quantity changed");
-              start();
-            }
-          )
-```
 
-### Purchasing
+The server side and the client side are connected via the url and each action must be reciprocated. On the client side, we mirrored each of the methods. 
 
-![purchasing-1-object](/images/bamazon_purchasing1.PNG)
-
-### Purchasing multiple
-
-![purchasing-multiple-objects](/images/bamazon_purchasing2.PNG)
-
-If the amount that is chosen by the user, exceeds that of the amount in the database, the program alerts the user and the programs restarts.
+To create the list, we give each record within the names table a default boolean value of false. After a user clicks th "Add to List" button, the value is then changed to true. 
 
 ```
-if (chosenAmount > chosenProduct.stock_quantity) {
-          console.log("Insufficient Quantity");
-          start();
+app.put("/api/list/:id", function (req, res) {
+  db.Names.update({
+    list: 1
+  }, {
+    where: {
+      id: req.params.id 
+    }
+  }).then(function(dbTodo) {
+    res.json(dbTodo);
+  });
+});
+
 ```
 
-### Insufficient Quantity
+The list page only shows those records with a true value. This functionality can only work temporarily and it is not a long term solution. Future development will improve upon this by creating unique tables for each user. 
 
-![insufficient-quantity](/images/bamazon_insufficent_quantity.PNG)
-
-
-The user can exit the program by selecting the letter q.
-
-### Quitting
-
-![quiting](/images/bamazon_quiting_program.PNG)
 
 ## Challenges and Future Improvements
-Creating and populating the database using mySQL was rather easy. However, the application became harder to develop once the user's input had to be compared with the information stored within the database. 
+This project was very difficult since it was one of the first times where we had to utilize an MVC, sequelize, and an external API. Understanding how all those things linked between files was challenging especially since the syntax can be very sensitive.
 
-As of right now, there are bugs remaning in the exiting of the application. Q must be selected in the first prompt; if an item is selected but then the user tries to exit on the second prompt, an error is thrown. In addition, what functionality the app has to exit is a bit awkward and could use some fine tuning. 
+There are many future impovements, among them is creating a proper way of saving names to lists for each user. We would also like to add to the functionality and perhaps utilize a better API that provides more detail. 
 
 ## Acknowlegments 
-I want to recognize Phil's contribution to the exiting portion of the application. 
+Many people helped us along the way, Alyssa Graham and Phil Loy especially. 
