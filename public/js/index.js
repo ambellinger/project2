@@ -3,9 +3,9 @@ var $exampleText = $("#example-text");
 // eslint-disable-next-line no-unused-vars
 var $exampleDescription = $("#example-description");
 var $submitBtn = $("#submit");
-var $listBtn = $("#list");
+var $listBtn = $(".list");
 var $nameList = $("#example-list");
-var $deleteBtn = $("#delete");
+var $deleteBtn = $(".delete");
 
 // The API object contains methods for each kind of request we'll make
 var API = {
@@ -32,20 +32,20 @@ var API = {
   },
   getNames: function() {
     return $.ajax({
-      url: "/api/names",
+      url: "api/names",
       type: "GET"
     });
   },
   deleteName: function(id) {
     return $.ajax({
-      url: "/api/names/" + id,
+      url: "api/names/" + id,
       type: "DELETE"
     });
   },
 
   updateName: function(id) {
     return $.ajax({
-      url: "/api/list/" + id,
+      url: "api/list/" + id,
       type: "PUT"
     });
   }
@@ -55,7 +55,8 @@ var API = {
 var refreshNames = function() {
   API.getNames().then(function(data) {
     var $names = data.map(function(name) {
-      console.log(name);
+      console.log("testing the refresh names function");
+      //console.log(name);
       var $a = $("<a>")
         .text(name.name)
         .attr("href", "/name/" + name.id);
@@ -112,22 +113,15 @@ var handleDeleteBtnClick = function() {
 //handleListBtnClick is called when add to list button is clicked
 //Update the record from the db and refresh the list
 
-var handleListBtnClick = function(list) {
+var handleListBtnClick = function() {
   var idToUpdate = $(this)
     .parent()
     .attr("data-id");
 
   API.updateName(idToUpdate).then(function() {
     console.log("updating name...");
-    refreshNames();
+    //refreshNames();
   });
-  //API.updateName(list);
-  // $.ajax({
-  //   method: "PUT",
-  //   url: "/api/list",
-  //   data: list
-  // }).then(console.log("list button was clicked"));
-
   console.log("button clicked");
 };
 
@@ -220,7 +214,7 @@ var getName = function(name) {
 // window.onload = randomMName();
 // window.onload = randomFName();
 $submitBtn.on("click", handleFormSubmit);
-$listBtn.on("click", handleListBtnClick);
+$nameList.on("click", ".list", handleListBtnClick);
 // $submitBtn.on("click", handleFormSubmit);
 // $submitBtn.on("click", getRelated);
-$deleteBtn.on("click", handleDeleteBtnClick);
+$nameList.on("click", ".delete", handleDeleteBtnClick);
