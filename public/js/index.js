@@ -5,6 +5,7 @@ var $exampleDescription = $("#example-description");
 var $submitBtn = $("#submit");
 var $listBtn = $("#list");
 var $nameList = $("#example-list");
+var $deleteBtn = $("#delete");
 
 // The API object contains methods for each kind of request we'll make
 var API = {
@@ -31,13 +32,13 @@ var API = {
   },
   getNames: function() {
     return $.ajax({
-      url: "api/names",
+      url: "/api/names",
       type: "GET"
     });
   },
-  deleteName: function() {
+  deleteName: function(id) {
     return $.ajax({
-      url: "api/names/",
+      url: "/api/names/" + id,
       type: "DELETE"
     });
   },
@@ -222,4 +223,4 @@ $submitBtn.on("click", handleFormSubmit);
 $listBtn.on("click", handleListBtnClick);
 // $submitBtn.on("click", handleFormSubmit);
 // $submitBtn.on("click", getRelated);
-$nameList.on("click", ".delete", handleDeleteBtnClick);
+$deleteBtn.on("click", handleDeleteBtnClick);
