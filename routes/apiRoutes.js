@@ -1,9 +1,6 @@
 var db = require("../models");
 
 var axios = require("axios");
-//Jim, since we rename Name to Names, db will not recognize db.Name anymore.
-//Now db will only see db.Names
-//This means you have to change anywhere it reference db.Name to db.Names
 
 var keys = require("../keys");
 
@@ -14,11 +11,8 @@ module.exports = function (app) {
     var search = req.params.name;
     //APIKey is your actual key, hidden in the .env
     var APIKey = keys.KEY;
-    //console.log(APIKey);
     axios.get(`https://www.behindthename.com/api/lookup.json?name=${search}&key=${APIKey}`).then(
       function (response) {
-       //console.log(response.data);
-
         res.json(response.data)
       }
     );
@@ -30,7 +24,7 @@ module.exports = function (app) {
     })
   })
 
-  // Create a new example
+  // Creates a new example
   app.post("/api/names", function (req, res) {
     db.Names.create(req.body).then(function (dbNames) {
       //this is the same as the data passed through from the refreshNames function, but as a callback function it must be included
@@ -40,9 +34,6 @@ module.exports = function (app) {
   });
   //req.body from the middleware which has been translated into json, using the .usage operator to find the many results if a name has them.
   app.post("/api/origins", function (req, res) {
-    //console.log("data:" + req.body.usages);
-
-    //console.log("nameid:" + req.body.nameid);
 
     for (var i = 0; i < req.body.usages[0].usages.length; i++) {
 
@@ -59,6 +50,7 @@ module.exports = function (app) {
     }
   })
 
+  //DELETE BUTTON STUFF//
   // Delete an example by id
   app.delete("/api/names/:id", function (req, res) {
     db.Names.destroy({ 
@@ -72,7 +64,7 @@ module.exports = function (app) {
   });
 
 
-//LIST STUFF!!!!!!!!!!!!!!!!!!!!!!//
+//LIST BUTTON STUFF//
 app.put("/api/list/:id", function (req, res) {
   db.Names.update({
     list: 1

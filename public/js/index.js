@@ -1,6 +1,5 @@
 // Get references to page elements
 var $exampleText = $("#example-text");
-// eslint-disable-next-line no-unused-vars
 var $exampleDescription = $("#example-description");
 var $submitBtn = $("#submit");
 var $listBtn = $(".list");
@@ -19,7 +18,7 @@ var API = {
       data: JSON.stringify(example)
     });
   },
-  //example is the object created in the saveOrigin function, containing the name ID from the table and the information from the external API request
+  //Example is the object created in the saveOrigin function, containing the name ID from the table and the information from the external API request
   saveOrigin: function(example) {
     return $.ajax({
       headers: {
@@ -55,8 +54,6 @@ var API = {
 var refreshNames = function() {
   API.getNames().then(function(data) {
     var $names = data.map(function(name) {
-      console.log("testing the refresh names function");
-      //console.log(name);
       var $a = $("<a>")
         .text(name.name)
         .attr("href", "/name/" + name.id);
@@ -87,16 +84,13 @@ var refreshNames = function() {
 
 // handleFormSubmit is called whenever we submit a new example
 // Save the new example to the db and refresh the list
-// eslint-disable-next-line no-unused-vars
 var handleFormSubmit = function(event) {
   event.preventDefault();
   //$exampleText is the input search text, taken as a string and added to the API call URL
   getName($exampleText.val().trim());
-  // var name = {
-  //   name: $exampleText.val().trim()
-  // gender: $exampleDescriptoin.val().trim()
 };
 
+//DELETE BUTTON//
 // handleDeleteBtnClick is called when an example's delete button is clicked
 // Remove the example from the db and refresh the list
 var handleDeleteBtnClick = function() {
@@ -106,11 +100,10 @@ var handleDeleteBtnClick = function() {
 
   API.deleteName(idToDelete).then(function() {
     refreshNames();
-    // location.reload();
   });
 };
 
-//LIST STUFF!!!!!!!!!!!!!//
+//LIST BUTTON//
 //handleListBtnClick is called when add to list button is clicked
 //Update the record from the db and refresh the list
 
@@ -121,6 +114,8 @@ var handleListBtnClick = function() {
 
   API.updateName(idToUpdate).then(function() {
     console.log("updating name...");
+    //Keeping code for the future development to delete the name from the front page withoout deleting it
+    //from the database
     //refreshNames();
   });
   console.log("button clicked");
@@ -136,14 +131,14 @@ var getName = function(name) {
       console.log("behind names: " + data[0].name);
 
       var name = {
-        // PROPERTIES & METHODS ONLY (no methods today)
+        // PROPERTIES & METHODS ONLY
         name: data[0].name,
         gender: data[0].gender
       };
       //getting data from API, after creating an object, to store on client side in order to use server side
       //server side creates record in MySQL
       API.saveName(name).then(function(response) {
-        //response is the data returned from the
+        //response is the data returned
         refreshNames();
         console.log("nameid:" + response.id);
         //response.id is the ID from the name table, taken from save name
@@ -155,9 +150,6 @@ var getName = function(name) {
 
         console.log(origin.usages[0].usages[0].usage_full);
         console.log(origin.usages[0].usages[0].usage_gender);
-        // eslint-disable-next-line no-empty-function
-        //
-        // eslint-disable-next-line no-empty-function
         API.saveOrigin(origin).then(function(response) {});
       });
       $exampleText.val("");
@@ -165,6 +157,7 @@ var getName = function(name) {
   });
 };
 
+//CODE BELOW IS KEPT FOR FUTURE DEVELOPMENT//
 // var randomMName = function() {
 //   var apiKey = "ji598704009";
 //   var url =
