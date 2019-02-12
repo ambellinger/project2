@@ -1,37 +1,68 @@
-
 <div id="home">
   <div class="container">
     <div class="row">
-      <div class="col-8 offset-2">
+      <div class="col-10 offset-1">
 
-{{!-- Creates the Top Part//Header --}}
-
-      <h1 id="mainheader">{{msg}}</h1>
-  {{!-- Area for the search --}}
-
-  <div class="container">
-        <h2 id="header">Search for a Name!</h2>
-        <form class="clearfix mb-4" action="POST">
-          <div class="form-group">
-            <label for="example-text">Name</label>
-            <input type="text" id="example-text" class="form-control" aria-describedby="example-text" placeholder="Enter Name">
-          </div>
-
-          <button id="submit" class="waves-effect waves-light btn">Search<i class="material-icons right">send</i></button>
-          </form>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">Namesake</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavDropdown">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" href="/">Home <span class="sr-only"></span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" class="savedlink float-right" href="list/">About</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link" href="list/" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Saved Lists
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+          <a class="dropdown-item" class="savedlink float-right" href="list/">Main</a>
+        </div>
+      </li>
+    </ul>
   </div>
+</nav>
+
+        {{!-- Creates the Top Part//Header --}}
+
+        <h1 id="mainheader">{{msg}}</h1>
+        {{!-- Area for the search --}}
+
+        <div class="container">
+          <h2 id="header" class="text-monospace">Search for a Name</h2>
+          <form class="clearfix mb-4" action="POST">
+            <div class="form-group">
+              <label for="example-text">Name</label>
+              <input type="text" id="example-text" class="form-control" aria-describedby="example-text"
+                placeholder="Enter Name">
+            </div>
+
+            <button id="submit" class="waves-effect waves-light btn">Search<i
+                class="material-icons right">send</i></button>
+          </form>
+        </div>
         {{!-- Div for popular names --}}
         <div class="container" id="popular">
-        <h3 id="header">Most Recently Searched:</h3>
-        <ul id="example-list" class="list-group">
-          {{#each names}}
-          <li data-id="{{this.id}}" class="list-group-item">
-            <a href="name/{{this.id}}">{{this.name}}</a>
-          <button class="btn btn-danger float-right delete">ｘ</button>
+          <h3 id="header">Most Recently Searched:</h3>
+          <ul id="example-list" class="list-group">
+            {{#each names}}
+            <li data-id="{{this.id}}" class="list-group-item">
+              <a href="name/{{this.id}}">{{this.name}}</a>
+              <button class="btn btn-danger float-right delete" id="delete">ｘ</button>
+              <button class="btn btn-success float-right waves-effect waves-light list" id="list">Add to Your List</button>
+            </li>
+            {{/each}}
+          </ul>
 
-          </li>
-          {{/each}}
-        </ul>
+          {{!-- View Saved List --}}
+          {{!-- <h3 id="header"><a class="savedlink float-right" href="list/">View Saved List</a></h3> --}}
+
+
         </div>
 
 
@@ -40,6 +71,6 @@
   </div>
 </div>
 
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> 
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 <script src="/js/index.js"></script>
