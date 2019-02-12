@@ -72,7 +72,8 @@ var refreshNames = function() {
 
       var $addlistbutton = $("<button>")
         .text("Add To Your List")
-        .addClass("list");
+        .addClass("list")
+        .addClass("btn float-right");
 
       $li.append($a, $button, $addlistbutton);
 
